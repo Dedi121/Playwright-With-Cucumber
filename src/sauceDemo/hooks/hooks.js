@@ -8,7 +8,7 @@ let page
 setDefaultTimeout(60000)
 
 BeforeAll(async function () {
-    browser = await chromium.launch({ headless: false, })
+    browser = await chromium.launch({ headless: true, })
     page = await browser.newPage()
     pageUtils.page = page
 })
