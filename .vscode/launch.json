@@ -14,7 +14,7 @@
                 "${workspaceFolder}/src/sauceDemo/hooks/*.js",
                 "--require",
                 "${workspaceFolder}/src/sauceDemo/steps/*.js",
-                "${workspaceFolder}/src/sauceDemo/features/*.feature",
+                "${workspaceFolder}/src/sauceDemo/features/addingProducts.feature",
                 
             ],
             "skipFiles": [

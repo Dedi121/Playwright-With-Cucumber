@@ -18,10 +18,10 @@ Then(/^"([^"]*)" clicks on the cart icon$/, async function (userType) {
     await this.inventoryUtils.validateCartTitle()
 })
 
-Then(/^"([^"]*)" checks the prices of the products$/, async function (string) {
+Then(/^"([^"]*)" checks the prices of the products$/, async function (userType) {
 
 })
 
-Then(/^"([^"]*)" goes to the next page$/, async function (string) {
+Then(/^"([^"]*)" goes to the next page$/, async function (userType) {
 
 })
