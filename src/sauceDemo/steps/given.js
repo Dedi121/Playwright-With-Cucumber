@@ -1,7 +1,7 @@
 const { Given } = require('@cucumber/cucumber')
 const { loginUtils } = require('../utils/loginUtils')
 const { inventoryUtils } = require('../utils/inventoryUtils')
-const { pageUtils } = require('../../hooks/pageUtils')
+const { pageUtils } = require('../hooks/pageUtils')
 
 Given(/^User navigates to the application$/, { timeout: 40000 }, async () => {
 

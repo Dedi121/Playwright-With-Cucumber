@@ -1,7 +1,7 @@
 const { When } = require('@cucumber/cucumber')
 const { loginUtils } = require('../utils/loginUtils')
 const { inventoryUtils } = require('../utils/inventoryUtils')
-const { pageUtils } = require('../../hooks/pageUtils')
+const { pageUtils } = require('../hooks/pageUtils')
 
 When(/^User "([^"]*)" enters his credentials$/, { timeout: 40000 }, async (userType) => {
     this.loginUtils = new loginUtils(pageUtils)

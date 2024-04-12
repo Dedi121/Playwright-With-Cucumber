@@ -1,6 +1,6 @@
 const users = require('../userData/users')
 const loginPage = require('../pages/loginPage')
-const { pageUtils } = require('../../hooks/pageUtils')
+const { pageUtils } = require('../hooks/pageUtils')
 
 class loginUtils {
     constructor(pageUtils) {

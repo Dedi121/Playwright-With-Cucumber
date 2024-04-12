@@ -1,18 +1,7 @@
 {
-  "name": "playwrightwithcucumber-beginnings",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "cucumber-js test --exit"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "@cucumber/cucumber": "^10.4.0",
     "@playwright/test": "^1.43.0",
-    "@types/node": "^20.12.6",
-    "prettier": "3.2.5"
+    "reflect-metadata": "^0.2.2"
   }
 }

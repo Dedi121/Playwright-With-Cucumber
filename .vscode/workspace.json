@@ -1,0 +1,13 @@
+{
+    "cucumberautocomplete.steps": [
+        "C:/PlaywrightWithCucumber-Beginnings/src/sauceDemo/steps/*.js"
+    ],
+    "cucumberautocomplete.syncfeatures": "C:/PlaywrightWithCucumber-Beginnings/src/sauceDemo/features/*.feature",
+    "cucumberautocomplete.strictGherkinCompletion": true,
+    "settings": {},
+    "folders": [
+        {
+            "path": "C:/PlaywrightWithCucumber-Beginnings/src/sauceDemo/"
+        }
+    ]
+}
