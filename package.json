@@ -2,6 +2,7 @@
   "dependencies": {
     "@cucumber/cucumber": "^10.4.0",
     "@playwright/test": "^1.43.0",
+    "date-fns": "^3.6.0",
     "reflect-metadata": "^0.2.2"
   }
 }

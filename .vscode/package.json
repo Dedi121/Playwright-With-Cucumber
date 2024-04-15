@@ -1,5 +1,5 @@
 {
 "scripts": {
-    "debug": "node --inspect=1337 --debug-brk --nolazy node_modules/@cucumber/cucumber/bin/cucumber-js --format --exit json:./reports/report.json"
+    "debug": "node --inspect=1337 --inspect-brk node_modules/@cucumber/cucumber/bin/cucumber-js json:./reports/report.json"
 }
 }

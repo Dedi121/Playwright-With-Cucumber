@@ -7,14 +7,16 @@
             "name": "Debug Playwright with Cucumber",
             "runtimeExecutable": "node",
             "console": "integratedTerminal",
-            "timeout": 30000,
+            "timeout": 600000,
             "program": "${workspaceFolder}/node_modules/@cucumber/cucumber/bin/cucumber-js",
             "args": [
                 "--require",
                 "${workspaceFolder}/src/sauceDemo/hooks/*.js",
                 "--require",
                 "${workspaceFolder}/src/sauceDemo/steps/*.js",
-                "${workspaceFolder}/src/sauceDemo/features/addingProducts.feature",
+                "${workspaceFolder}/src/sauceDemo/features/*.feature",
+                "--tags",
+                "@EndtoEnd"
                 
             ],
             "skipFiles": [
