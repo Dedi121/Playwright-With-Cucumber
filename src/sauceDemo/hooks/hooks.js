@@ -3,13 +3,21 @@ const { chromium } = require('@playwright/test')
 const { pageUtils } = require('./pageUtils')
 
 let browser
+let context
 let page
 
-setDefaultTimeout(60000)
+setDefaultTimeout(60000000)
 
 BeforeAll(async function () {
-    browser = await chromium.launch({ headless: true, })
-    page = await browser.newPage()
+    browser = await chromium.launch({
+        headless: false,
+        slowMo: 100,
+        args: ['--start-maximized'],
+    })
+    context = await browser.newContext({
+        viewport: null
+    })
+    page = await context.newPage()
     pageUtils.page = page
 })
 

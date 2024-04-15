@@ -8,7 +8,8 @@ class inventoryUtils {
         this.pageUtils = pageUtils.page
         this.inventoryPage = inventoryPage
         this.cartPage = cartPage
-        this.productPrice = new Map()
+        this.productNames = [] // Array to store product names
+        this.productPrices = [] // Array to store product prices
     }
 
     async validateInventoryTitle() {
@@ -16,36 +17,27 @@ class inventoryUtils {
         expect(title).toBe('Products');
     }
 
-    async addProductsToCart(userType, selectedProducts, selectedPrices) {
+    async addProductsToCart(userType, selectedProducts) {
 
-        for (const productName of selectedProducts) {
-            for (const productPrice of selectedPrices) {
-                var elements = await this.pageUtils.$$(`${inventoryPage.inventoryInventory}`);
+        for (var productName of selectedProducts) {
+            var elements = await this.pageUtils.$$(`${inventoryPage.inventoryInventory}`);
 
-                for (const [productElement, priceElement] of elements.map(item => [item, item])) {
-                    var addToCartButton = await (await productElement.$(`#add-to-cart-${productName.toLowerCase().replace(/\s/g, '-')}`));
-                    var pricesOfProducts = await (await priceElement.$(inventoryPage.inventoryItemPrice)).textContent()
+            for (var [productElement, priceElement] of elements.map(item => [item, item])) {
+                var addToCartButton = await (await productElement.$(`#add-to-cart-${productName.toLowerCase().replace(/\s/g, '-')}`));
+                var productPrice = await (await priceElement.$(inventoryPage.inventoryItemPrice)).textContent()
 
-                    if (addToCartButton) {
-                        await addToCartButton.click();
-                        this.productPrice.set(productName, pricesOfProducts)
-                        break;
-                    }
+                if (addToCartButton) {
+                    await addToCartButton.click();
+                    this.productNames.push(productName)
+                    this.productPrices.push(productPrice)
+                    break;
                 }
             }
         }
     }
 
     async iterateProductNameAndPrice() {
-        let itemName = []
-        let itemPrice = []
-        for (var [productName, pricesOfProducts] of this.productPrice.entries()) {
-            itemName.push(productName)
-            itemPrice.push(pricesOfProducts)
-            console.log(`Product: ${productName}, Price: ${pricesOfProducts}`)
-
-        }
-        return { itemName, itemPrice }
+        return { itemName: this.productNames, itemPrice: this.productPrices };
     }
 
     async clickCartButton() {
@@ -57,17 +49,5 @@ class inventoryUtils {
         expect(title).toBe('Your Cart');
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = { inventoryUtils }

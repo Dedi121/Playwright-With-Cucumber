@@ -1,3 +1,4 @@
+@Login @Smoke
 Feature: User Authentication
 
   Background: 

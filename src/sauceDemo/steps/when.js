@@ -8,10 +8,9 @@ When(/^User "([^"]*)" enters his credentials$/, { timeout: 40000 }, async (userT
     await this.loginUtils.validLogin(userType)
 })
 
-When(/^"([^"]*)" adds "([^"]*)" with "([^"]*)" to cart$/, { timeout: 400000 }, async function (userType, selectedProducts, selectedPrices, addProductsTable) {
+When(/^"([^"]*)" adds "([^"]*)" to cart$/, { timeout: 400000 }, async function (userType, selectedProducts, addProductsTable) {
     selectedProducts = addProductsTable.raw().map(row => row[0])
-    selectedPrices = addProductsTable.raw().map(column => column[1])
     this.inventoryUtils = new inventoryUtils(pageUtils)
-    await this.inventoryUtils.addProductsToCart(userType, selectedProducts, selectedPrices)
+    await this.inventoryUtils.addProductsToCart(userType, selectedProducts)
     await this.inventoryUtils.iterateProductNameAndPrice()
 })
