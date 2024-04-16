@@ -6,12 +6,12 @@ let browser
 let context
 let page
 
-setDefaultTimeout(60000000)
+setDefaultTimeout(6000000)
 
 BeforeAll(async function () {
     browser = await chromium.launch({
         headless: false,
-        slowMo: 100,
+        slowMo: 500,
         args: ['--start-maximized'],
     })
     context = await browser.newContext({

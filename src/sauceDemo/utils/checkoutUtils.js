@@ -2,35 +2,40 @@ const { expect } = require('@playwright/test')
 const inventoryPage = require('../pages/inventoryPage')
 const cartPage = require('../pages/cartPage')
 const checkoutPage = require('../pages/checkoutPage')
-const lastCheckout = require('../pages/lastCheckoutPage')
+const lastCheckoutPage = require('../pages/lastCheckoutPage')
 const { pageUtils } = require('../hooks/pageUtils')
+const inventoryUtils = require('./inventoryUtils')
 
 class checkoutUtils {
     constructor(pageUtils) {
-        this.pageUtils = pageUtils.page
-        this.inventoryPage = inventoryPage
-        this.cartPage = cartPage
-        this.checkoutPage = checkoutPage
+        if (!checkoutUtils.instance) {
+            checkoutUtils.instance = this
+            this.pageUtils = pageUtils.page
+            this.inventoryPage = inventoryPage
+            this.cartPage = cartPage
+            this.checkoutPage = checkoutPage
+        }
+        return checkoutUtils.instance
     }
 
     async insertCredentials(userType, credentials) {
 
         for (var credential of credentials) {
             const [firstName, lastName, zipCode] = credential;
-            await (await this.pageUtils.$(checkoutPage.checkoutFirstname)).fill(firstName)
-            await (await this.pageUtils.$(checkoutPage.checkoutLastname)).fill(lastName)
-            await (await this.pageUtils.$(checkoutPage.checkoutZipcode)).fill(zipCode)
+            await (await pageUtils.page.$(checkoutPage.checkoutFirstname)).fill(firstName)
+            await (await pageUtils.page.$(checkoutPage.checkoutLastname)).fill(lastName)
+            await (await pageUtils.page.$(checkoutPage.checkoutZipcode)).fill(zipCode)
         }
     }
 
     async goToLastCheckout() {
-        await this.pageUtils.click(checkoutPage.checkoutContinue)
+        await pageUtils.page.click(checkoutPage.checkoutContinue)
     }
 
     async validateLastCheckoutTitle() {
-        let title = await this.pageUtils.textContent(lastCheckout.lastCheckoutTitle);
+        let title = await pageUtils.page.textContent(lastCheckoutPage.lastCheckoutTitle);
         expect(title).toBe('Checkout: Overview');
     }
 }
 
-module.exports = { checkoutUtils }
+module.exports = new checkoutUtils(pageUtils, inventoryUtils)

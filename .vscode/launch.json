@@ -7,7 +7,7 @@
             "name": "Debug Playwright with Cucumber",
             "runtimeExecutable": "node",
             "console": "integratedTerminal",
-            "timeout": 600000,
+            "timeout": 60000,
             "program": "${workspaceFolder}/node_modules/@cucumber/cucumber/bin/cucumber-js",
             "args": [
                 "--require",

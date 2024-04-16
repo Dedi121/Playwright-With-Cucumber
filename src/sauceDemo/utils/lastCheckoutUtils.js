@@ -1,25 +1,29 @@
 const { expect } = require('@playwright/test')
 const { pageUtils } = require('../hooks/pageUtils')
+const inventoryUtils = require('../utils/inventoryUtils')
 const lastCheckoutPage = require('../pages/lastCheckoutPage')
 const finishPage = require('../pages/finishPage')
 // npm install date-fns
 const { format } = require("date-fns")
 
 class lastCheckoutUtils {
-    constructor(pageUtils, inventoryUtils) {
-        this.pageUtils = pageUtils.page
-        this.inventoryUtils = inventoryUtils
-        this.lastCheckoutPage = lastCheckoutPage
+    constructor(pageUtils) {
+        if (!lastCheckoutUtils.instance) {
+            lastCheckoutUtils.instance = this
+            this.pageUtils = pageUtils.page
+            this.lastCheckoutPage = lastCheckoutPage
+        }
+        return lastCheckoutUtils.instance
     }
 
     async verifyPrices() {
         // Get the product names and prices from the inventoryUtils
-        var { itemName, itemPrice } = await this.inventoryUtils.iterateProductNameAndPrice();
+        var { itemName, itemPrice } = await inventoryUtils.iterateProductNameAndPrice();
 
         // Get the count of elements with the locator cartPage.cartInventoryItemName
-        var count = await this.pageUtils.$$eval(this.lastCheckoutPage.lastCheckoutItem, elements => elements.length);
+        var count = await pageUtils.page.$$eval(this.lastCheckoutPage.lastCheckoutItem, elements => elements.length);
 
-        var elements = await this.pageUtils.$$(this.lastCheckoutPage.lastCheckoutItem);
+        var elements = await pageUtils.page.$$(this.lastCheckoutPage.lastCheckoutItem);
 
         var dataMap = new Map()
 
@@ -49,15 +53,15 @@ class lastCheckoutUtils {
     }
 
     async checkSubTotalPrice() {
-        var { itemPrice } = await this.inventoryUtils.iterateProductNameAndPrice();
+        var { itemPrice } = await inventoryUtils.iterateProductNameAndPrice();
 
-        var count = await this.pageUtils.$$eval(this.lastCheckoutPage.lastCheckoutItem, elements => elements.length);
+        var count = await pageUtils.page.$$eval(this.lastCheckoutPage.lastCheckoutItem, elements => elements.length);
 
-        var elements = await this.pageUtils.$$(this.lastCheckoutPage.lastCheckoutItem);
+        var elements = await pageUtils.page.$$(this.lastCheckoutPage.lastCheckoutItem);
 
         var priceList = []
 
-        var subTotalPrice = (await (await this.pageUtils.$(lastCheckoutPage.lastCheckoutSubTotal)).textContent()).split("$")[1]
+        var subTotalPrice = (await (await pageUtils.page.$(lastCheckoutPage.lastCheckoutSubTotal)).textContent()).split("$")[1]
 
         for (let i = 0; i < count; ++i) {
             var element = elements[i]
@@ -82,9 +86,9 @@ class lastCheckoutUtils {
         var sumOfPrices = await this.checkSubTotalPrice()
 
         //Getting Tax
-        var tax = (await (await this.pageUtils.$(lastCheckoutPage.lastCheckoutTax)).textContent()).split("$")[1]
+        var tax = (await (await pageUtils.page.$(lastCheckoutPage.lastCheckoutTax)).textContent()).split("$")[1]
         var priceWithTax = (sumOfPrices + Number(tax)).toFixed(2)
-        var total = (await (await this.pageUtils.$(lastCheckoutPage.lastCheckoutTotal)).textContent()).split("$")[1]
+        var total = (await (await pageUtils.page.$(lastCheckoutPage.lastCheckoutTotal)).textContent()).split("$")[1]
         if (priceWithTax === total)
             console.log(`${total} = ${priceWithTax}`)
         else
@@ -92,17 +96,17 @@ class lastCheckoutUtils {
     }
 
     async goToFinish() {
-        await this.pageUtils.click(lastCheckoutPage.lastCheckoutFinish)
+        await pageUtils.page.click(lastCheckoutPage.lastCheckoutFinish)
     }
 
     async takeScreenshot(userType) {
 
-        let title = await this.pageUtils.textContent(finishPage.finishTitle);
+        let title = await pageUtils.page.textContent(finishPage.finishTitle);
         expect(title).toBe('Checkout: Complete!');
         const currentDate = format(new Date(), "yyyy-MM-dd'_'HH-mm-ss");
         const screenshotPath = `src/sauceDemo/screenshots/${userType}_${currentDate}.png`;
-        await this.pageUtils.screenshot({ path: screenshotPath, fullPage: true });
+        await pageUtils.page.screenshot({ path: screenshotPath, fullPage: true });
     }
 }
 
-module.exports = { lastCheckoutUtils }
+module.exports = new lastCheckoutUtils(pageUtils, inventoryUtils)
