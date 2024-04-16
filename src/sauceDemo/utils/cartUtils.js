@@ -1,25 +1,28 @@
 const { expect } = require('@playwright/test')
 const cartPage = require('../pages/cartPage')
 const checkoutPage = require('../pages/checkoutPage')
-const { inventoryUtils } = require('../utils/inventoryUtils')
+const inventoryUtils = require('../utils/inventoryUtils')
 const { pageUtils } = require('../hooks/pageUtils')
 
 class cartUtils {
-    constructor(pageUtils, inventoryUtils) {
-        this.pageUtils = pageUtils.page
-        this.inventoryUtils = inventoryUtils
-        this.cartPage = cartPage
+    constructor(pageUtils) {
+        if (!cartUtils.instance) {
+            cartUtils.instance = this
+            this.pageUtils = pageUtils.page
+            this.cartPage = cartPage
+        }
+        return cartUtils.instance
     }
 
     async checkPrices() {
         // Get the product names and prices from the inventoryUtils
-        var { itemName, itemPrice } = await this.inventoryUtils.iterateProductNameAndPrice();
+        var { itemName, itemPrice } = await inventoryUtils.iterateProductNameAndPrice();
 
         // Get the count of elements with the locator cartPage.cartInventoryItemName
-        var count = await this.pageUtils.$$eval(this.cartPage.cartItem, elements => elements.length);
+        var count = await pageUtils.page.$$eval(this.cartPage.cartItem, elements => elements.length);
 
         // Get all elements with the locator cartPage.cartCart
-        var elements = await this.pageUtils.$$(this.cartPage.cartItem);
+        var elements = await pageUtils.page.$$(this.cartPage.cartItem);
 
         // Create a map to store the data
         var dataMap = new Map();
@@ -54,14 +57,14 @@ class cartUtils {
     }
 
     async goToCheckout() {
-        await this.pageUtils.click(cartPage.cartCheckoutBtn)
+        await pageUtils.page.click(cartPage.cartCheckoutBtn)
     }
 
     async validateCheckoutTitle() {
-        let title = await this.pageUtils.textContent(checkoutPage.checkoutTitle);
+        let title = await pageUtils.page.textContent(checkoutPage.checkoutTitle);
         expect(title).toBe('Checkout: Your Information');
     }
 
 }
 
-module.exports = { cartUtils }
+module.exports = new cartUtils(pageUtils, inventoryUtils)

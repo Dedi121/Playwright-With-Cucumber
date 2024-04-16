@@ -1,59 +1,60 @@
 const { Then } = require('@cucumber/cucumber')
 const { pageUtils } = require('../hooks/pageUtils')
-const { loginUtils } = require('../utils/loginUtils')
-const { inventoryUtils } = require('../utils/inventoryUtils')
-const { cartUtils } = require('../utils/cartUtils')
-const { checkoutUtils } = require('../utils/checkoutUtils')
-const { lastCheckoutUtils } = require('../utils/lastCheckoutUtils')
+const loginUtils = require('../utils/loginUtils')
+const inventoryUtils = require('../utils/inventoryUtils')
+const cartUtils = require('../utils/cartUtils')
+const checkoutUtils = require('../utils/checkoutUtils')
+const lastCheckoutUtils = require('../utils/lastCheckoutUtils')
 
 Then(/^"([^"]*)" clicks the login button$/, { timeout: 40000 }, async (userType) => {
-    this.loginUtils = new loginUtils(pageUtils)
-    await this.loginUtils.clickLoginBtn(userType)
+    await loginUtils.clickLoginBtn(userType)
 })
 
 Then(/^"([^"]*)" has logged in successfully$/, { timeout: 40000 }, async (userType) => {
-    this.inventoryUtils = new inventoryUtils(pageUtils)
-    await this.inventoryUtils.validateInventoryTitle()
+    await inventoryUtils.validateInventoryTitle()
 })
 
 Then(/^"([^"]*)" clicks on the cart icon$/, { timeout: 40000 }, async function (userType) {
-    await this.inventoryUtils.clickCartButton()
-    await this.inventoryUtils.validateCartTitle()
+    await inventoryUtils.clickCartButton()
+    await inventoryUtils.validateCartTitle()
 })
 
 Then(/^"([^"]*)" checks the prices of the products$/, { timeout: 40000 }, async function (userType) {
-    this.cartUtils = new cartUtils(pageUtils, this.inventoryUtils)
-    await this.cartUtils.checkPrices()
-
+    await cartUtils.checkPrices()
 })
 
 Then(/^"([^"]*)" goes to the checkout$/, async function (userType) {
-    await this.cartUtils.goToCheckout()
-    await this.cartUtils.validateCheckoutTitle()
-
+    await cartUtils.goToCheckout()
+    await cartUtils.validateCheckoutTitle()
 })
 
 Then(/^"([^"]*)" inserts his "([^"]*)"$/, async function (userType, credentials, datatable) {
     credentials = datatable.raw().map(row => row)
-    this.checkoutUtils = new checkoutUtils(pageUtils, this.inventoryUtils)
-    await this.checkoutUtils.insertCredentials(userType, credentials)
-
+    await checkoutUtils.insertCredentials(userType, credentials)
 })
 
 Then(/^"([^"]*)" clicks continue$/, async function (userType) {
-    await this.checkoutUtils.goToLastCheckout()
-    await this.checkoutUtils.validateLastCheckoutTitle()
+    await checkoutUtils.goToLastCheckout()
+    await checkoutUtils.validateLastCheckoutTitle()
 })
 
 Then(/^"([^"]*)" check the amount he needs to pay it is correct$/, async function (userType) {
-    this.lastCheckoutUtils = new lastCheckoutUtils(pageUtils, this.inventoryUtils)
-    await this.lastCheckoutUtils.verifyPrices()
-    await this.lastCheckoutUtils.checkSubTotalPrice()
-    await this.lastCheckoutUtils.checkTotalPrice()
-    await this.lastCheckoutUtils.goToFinish()
-
+    await lastCheckoutUtils.verifyPrices()
+    await lastCheckoutUtils.checkSubTotalPrice()
+    await lastCheckoutUtils.checkTotalPrice()
+    await lastCheckoutUtils.goToFinish()
 })
 
-Then(/^"([^"]*)" finish his checkout$/, async function (userType) {
-    await this.lastCheckoutUtils.takeScreenshot(userType)
+Then(/^"([^"]*)" finish his checkout$/, { timeout: 40000 }, async function (userType) {
+    //await lastCheckoutUtils.takeScreenshot(userType)
 })
+
+Then(/^"([^"]*)" has logged out successfully$/, { timeout: 40000 }, async function (userType) {
+    await inventoryUtils.loggingOut()
+})
+
+Then(/^"([^"]*)" removes "([^"]*)" to cart$/, { timeout: 400000 }, async function (userType, selectedProducts, addProductsTable) {
+    selectedProducts = addProductsTable.raw().map(row => row[0])
+    await inventoryUtils.removeProductsFromCart(userType, selectedProducts)
+})
+

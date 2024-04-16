@@ -4,12 +4,16 @@ const { pageUtils } = require('../hooks/pageUtils')
 
 class loginUtils {
     constructor(pageUtils) {
-        this.pageUtils = pageUtils.page
-        this.loginPage = loginPage
+        if (!loginUtils.instance) {
+            loginUtils.instance = this
+            this.pageUtils = pageUtils.page
+            this.loginPage = loginPage
+        }
+        return loginUtils.instance
     }
 
     async goSite() {
-        await this.pageUtils.goto("https://www.saucedemo.com/")
+        await pageUtils.page.goto("https://www.saucedemo.com/")
     }
 
     async validLogin(userType) {
@@ -25,4 +29,4 @@ class loginUtils {
     }
 }
 
-module.exports = { loginUtils }
+module.exports = new loginUtils(pageUtils)
