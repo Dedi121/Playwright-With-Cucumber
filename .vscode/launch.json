@@ -16,7 +16,7 @@
                 "${workspaceFolder}/src/sauceDemo/steps/*.js",
                 "${workspaceFolder}/src/sauceDemo/features/*.feature",
                 "--tags",
-                "@EndtoEnd"
+                "@all"
                 
             ],
             "skipFiles": [

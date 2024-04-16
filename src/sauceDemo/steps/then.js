@@ -46,7 +46,7 @@ Then(/^"([^"]*)" check the amount he needs to pay it is correct$/, async functio
 })
 
 Then(/^"([^"]*)" finish his checkout$/, { timeout: 40000 }, async function (userType) {
-    //await lastCheckoutUtils.takeScreenshot(userType)
+    await lastCheckoutUtils.takeScreenshot(userType)
 })
 
 Then(/^"([^"]*)" has logged out successfully$/, { timeout: 40000 }, async function (userType) {
